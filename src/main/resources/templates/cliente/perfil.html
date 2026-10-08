@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Mi perfil')}"></head>
+<body class="min-h-screen bg-slate-100">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+        <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+        <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="mb-6">
+                <p class="text-sm uppercase tracking-[0.2em] text-slate-500">Cliente</p>
+                <h1 class="text-3xl font-bold text-slate-800">Mi perfil</h1>
+            </div>
+
+            <form th:action="@{/cliente/perfil}" th:object="${cliente}" method="post" class="space-y-5">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                <div>
+                    <label for="nombre" class="mb-1 block text-sm font-medium text-slate-700">Nombre</label>
+                    <input id="nombre" th:field="*{nombre}" type="text" required class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                </div>
+
+                <div>
+                    <label for="correo" class="mb-1 block text-sm font-medium text-slate-700">Correo</label>
+                    <input id="correo" th:field="*{correo}" type="email" required class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                </div>
+
+                <div>
+                    <label for="fechaInscripcion" class="mb-1 block text-sm font-medium text-slate-700">Fecha de registro</label>
+                    <input id="fechaInscripcion" th:field="*{fechaInscripcion}" type="date" class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                </div>
+
+                <button type="submit" class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">Guardar cambios</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Iniciar sesión')}"></head>
+<body class="min-h-screen bg-slate-100">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="mx-auto flex min-h-[calc(100vh-4rem)] max-w-5xl items-center justify-center px-4 py-10">
+        <div class="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+            <h1 class="text-3xl font-bold text-slate-800">Iniciar sesión</h1>
+            <p class="mt-2 text-sm text-slate-600">Ingrese su correo y contraseña para acceder.</p>
+
+            <div th:if="${param.error != null}" class="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                Correo o contraseña incorrectos.
+            </div>
+            <div th:if="${param.pendiente != null}" class="mt-4 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
+                Su cuenta está pendiente de aprobación por el administrador.
+            </div>
+            <div th:if="${param.logout != null}" class="mt-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
+                Sesión cerrada correctamente.
+            </div>
+            <div th:if="${success != null}" class="mt-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800" th:text="${success}"></div>
+
+            <form th:action="@{/login}" method="post" class="mt-6 space-y-5">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                <div>
+                    <label for="username" class="mb-1 block text-sm font-medium text-slate-700">Correo</label>
+                    <input id="username" name="username" type="email" required class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                </div>
+                <div>
+                    <label for="password" class="mb-1 block text-sm font-medium text-slate-700">Contraseña</label>
+                    <input id="password" name="password" type="password" required class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                </div>
+                <button type="submit" class="inline-flex w-full items-center justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700">Ingresar</button>
+            </form>
+
+            <p class="mt-6 text-center text-sm text-slate-600">
+                ¿No tienes cuenta?
+                <a th:href="@{/registro}" class="font-medium text-indigo-600 hover:text-indigo-500">Registrarme</a>
+            </p>
+        </div>
+    </main>
+</body>
+</html>

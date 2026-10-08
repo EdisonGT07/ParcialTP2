@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Producto')}"></head>
+<body class="min-h-screen bg-slate-100">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <main class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+        <div th:replace="~{fragments/alerts :: alerts}"></div>
+        <section class="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="mb-6">
+                <p class="text-sm uppercase tracking-[0.2em] text-slate-500">Administración</p>
+                <h1 class="text-3xl font-bold text-slate-800" th:text="${titulo}">Producto</h1>
+            </div>
+            <form th:action="@{/producto/guardar}" th:object="${producto}" method="post" class="space-y-5">
+                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                <div>
+                    <label for="nombre" class="mb-1 block text-sm font-medium text-slate-700">Nombre</label>
+                    <input id="nombre" type="text" th:field="*{nombre}" required minlength="2" maxlength="100" class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                </div>
+                <div>
+                    <label for="descripcion" class="mb-1 block text-sm font-medium text-slate-700">Descripción</label>
+                    <textarea id="descripcion" th:field="*{descripcion}" rows="3" maxlength="255" class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"></textarea>
+                </div>
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <div>
+                        <label for="precio" class="mb-1 block text-sm font-medium text-slate-700">Precio</label>
+                        <input id="precio" type="number" step="0.01" min="0.01" th:field="*{precio}" required class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                    </div>
+                    <div>
+                        <label for="stock" class="mb-1 block text-sm font-medium text-slate-700">Stock</label>
+                        <input id="stock" type="number" min="0" step="1" th:field="*{stock}" required class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                    </div>
+                    <div>
+                        <label for="categoria" class="mb-1 block text-sm font-medium text-slate-700">Categoría</label>
+                        <input id="categoria" type="text" th:field="*{categoria}" required class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                    </div>
+                    <div>
+                        <label for="marca" class="mb-1 block text-sm font-medium text-slate-700">Marca</label>
+                        <input id="marca" type="text" th:field="*{marca}" required class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                    </div>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <button type="submit" class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">Guardar producto</button>
+                    <a th:href="@{/producto/listar}" class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </main>
+  </body>
+</html>

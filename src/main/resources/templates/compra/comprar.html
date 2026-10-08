@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Tienda | mercado.')}"></head>
+<body class="shop-body">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="shop-shell">
+        <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+        <section class="shop-hero">
+            <div class="shop-hero__copy">
+                <span class="eyebrow"><span class="eyebrow__dot"></span> TU TIENDA, A TU RITMO</span>
+                <h1>Encuentra eso<br/>que <span>estabas buscando.</span></h1>
+                <p>Explora el catálogo, elige tus favoritos y arma un pedido en pocos pasos.</p>
+                <div class="hero-assurance">
+                    <span class="hero-assurance__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="m12 3 7 3v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                    <span>Compra segura <strong>·</strong> Stock actualizado al confirmar</span>
+                </div>
+            </div>
+            <div class="shop-hero__art" aria-hidden="true">
+                <div class="hero-orbit hero-orbit--one"></div>
+                <div class="hero-orbit hero-orbit--two"></div>
+                <div class="hero-spark hero-spark--one">✳</div>
+                <div class="hero-spark hero-spark--two">✦</div>
+                <div class="hero-shopping-bag">
+                    <svg viewBox="0 0 160 160" fill="none"><path d="M35 54h90l8 79H27l8-79Z" fill="#f6c85f"/><path d="M55 58V43a25 25 0 0 1 50 0v15" stroke="#173f35" stroke-width="8" stroke-linecap="round"/><path d="m57 90 16 16 32-34" stroke="#173f35" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="hero-note"><span class="hero-note__check">✓</span><span><strong>Listo para ti</strong><small>Tu próxima compra</small></span></div>
+            </div>
+            <div class="hero-bottomline"><span>BUENOS PRODUCTOS, MEJORES DECISIONES</span><span>CATÁLOGO DISPONIBLE <b th:text="${#lists.size(productos)}">0</b></span></div>
+        </section>
+
+        <div th:if="${mensajeCliente != null}" class="profile-notice">
+            <span class="profile-notice__icon" aria-hidden="true">!</span>
+            <div><strong>Completa tu perfil para finalizar tu compra.</strong><p th:text="${mensajeCliente}">Necesitamos tus datos para asociar el pedido a tu cuenta.</p></div>
+            <a th:href="@{/cliente/perfil}" class="profile-notice__link">Completar perfil <span aria-hidden="true">→</span></a>
+        </div>
+
+        <div class="shop-content">
+            <section class="catalog-area" aria-labelledby="catalog-title">
+                <div class="catalog-heading">
+                    <div>
+                        <span class="section-kicker">EL CATÁLOGO</span>
+                        <h2 id="catalog-title">Productos para ti <span class="catalog-count" th:text="${#lists.size(productos)}">0</span></h2>
+                        <p>Selecciona la cantidad que quieras y nosotros hacemos el resto.</p>
+                    </div>
+                    <label class="sort-control">
+                        <span>Ordenar por</span>
+                        <select id="sort-products" aria-label="Ordenar productos">
+                            <option value="featured">Recomendados</option>
+                            <option value="name">Nombre A-Z</option>
+                            <option value="price-asc">Precio: menor a mayor</option>
+                            <option value="price-desc">Precio: mayor a menor</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="catalog-tools">
+                    <label class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.2 4.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                        <input id="product-search" type="search" placeholder="¿Qué estás buscando?" autocomplete="off" />
+                        <kbd>Ctrl K</kbd>
+                    </label>
+                    <div class="category-filters" aria-label="Filtrar por categoría">
+                        <button type="button" class="category-chip is-active" data-category="all">Todo</button>
+                        <button th:each="categoria : ${categorias}" type="button" class="category-chip" th:data-category="${categoria}" th:text="${categoria}">Categoría</button>
+                    </div>
+                </div>
+
+                <form id="purchase-form" th:action="@{/comprar/confirmar}" th:object="${compraForm}" method="post">
+                    <div class="product-grid" id="product-grid">
+                        <article th:each="producto, iter : ${productos}"
+                                 class="product-card"
+                                 th:attr="data-name=${producto.nombre},data-description=${producto.descripcion},data-category=${producto.categoria},data-price=${producto.precio},data-stock=${producto.stock},data-index=${iter.index}">
+                            <div class="product-card__visual">
+                                <span class="product-card__category" th:text="${producto.categoria != null and !#strings.isEmpty(producto.categoria) ? producto.categoria : 'Selección'}">Categoría</span>
+                                <span class="product-card__stock"><i></i><span th:text="${producto.stock + ' disponibles'}">En stock</span></span>
+                                <div class="product-illustration" aria-hidden="true">
+                                    <span class="product-illustration__halo"></span>
+                                    <svg viewBox="0 0 120 120" fill="none"><rect x="23" y="26" width="74" height="68" rx="17" fill="#E4F0E8"/><circle cx="60" cy="60" r="25" fill="#C3DCCB"/><path d="M47 70V51l13-8 13 8v19H47Z" fill="#315E4D"/><path d="M55 70V59h10v11" stroke="#E4F0E8" stroke-width="3" stroke-linejoin="round"/><circle cx="83" cy="36" r="5" fill="#EAB95C"/><circle cx="36" cy="82" r="3" fill="#EAB95C"/></svg>
+                                </div>
+                                <span class="product-card__sku" th:text="${'#' + producto.id}">#000</span>
+                            </div>
+                            <div class="product-card__body">
+                                <h3 class="product-card__name" th:text="${producto.nombre}">Nombre del producto</h3>
+                                <p class="product-card__description" th:text="${producto.descripcion}">Descripción del producto</p>
+                                <div class="product-card__bottom">
+                                    <div class="product-price"><span>Valor unitario:</span><strong th:text="${'$ ' + #numbers.formatDecimal(producto.precio, 1, 'POINT', 0, 'COMMA')}">$ 0</strong></div>
+                                    <div class="quantity-control">
+                                        <button type="button" class="quantity-button" data-step="-1" th:attr="aria-label=${'Quitar una unidad de ' + producto.nombre}">−</button>
+                                        <input type="hidden" th:field="*{items[__${iter.index}__].productoId}" />
+                                        <input class="quantity-input" type="number" th:field="*{items[__${iter.index}__].cantidad}" min="0" th:max="${producto.stock}" value="0" inputmode="numeric" th:attr="aria-label=${'Cantidad de ' + producto.nombre}" />
+                                        <button type="button" class="quantity-button" data-step="1" th:attr="aria-label=${'Agregar una unidad de ' + producto.nombre}">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                    <div id="empty-search" class="empty-catalog" hidden>
+                        <span aria-hidden="true">⌕</span>
+                        <h3>No encontramos ese producto</h3>
+                        <p>Prueba con otro nombre o cambia la categoría seleccionada.</p>
+                        <button id="clear-search" type="button">Limpiar búsqueda</button>
+                    </div>
+                    <div th:if="${#lists.isEmpty(productos)}" class="empty-catalog empty-catalog--initial">
+                        <span aria-hidden="true">✳</span>
+                        <h3>Estamos preparando el catálogo</h3>
+                        <p>Por ahora no hay productos disponibles. Vuelve pronto para descubrir novedades.</p>
+                    </div>
+
+                    <div class="catalog-footnote">
+                        <span class="catalog-footnote__icon" aria-hidden="true">i</span>
+                        <p>El precio final y la disponibilidad se confirman al procesar tu pedido.</p>
+                    </div>
+                    <div id="purchase-error" class="purchase-inline-error" role="alert" hidden>Agrega al menos un producto para continuar.</div>
+                </form>
+            </section>
+
+            <aside class="cart-panel" aria-labelledby="cart-title">
+                <div class="cart-panel__top">
+                    <div>
+                        <span class="section-kicker">TU SELECCIÓN</span>
+                        <h2 id="cart-title">Tu pedido <span id="cart-badge" class="cart-badge">0</span></h2>
+                    </div>
+                    <span class="cart-panel__bag" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M4 8h16l-1.2 12H5.2L4 8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 9V6a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                    </span>
+                </div>
+
+                <div id="cart-empty" class="cart-empty">
+                    <span class="cart-empty__art" aria-hidden="true">
+                        <svg viewBox="0 0 84 84" fill="none"><path d="M13 20h7l7 34h37l8-25H24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="34" cy="65" r="4" fill="currentColor"/><circle cx="59" cy="65" r="4" fill="currentColor"/><path d="M39 38h13m-6-7v14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    </span>
+                    <strong>Tu pedido empieza aquí</strong>
+                    <p>Elige productos del catálogo y aparecerán en este resumen.</p>
+                </div>
+
+                <div id="cart-items" class="cart-items" aria-live="polite"></div>
+
+                <div class="cart-total">
+                    <div class="cart-total__line"><span>Productos</span><span id="cart-lines">0 artículos</span></div>
+                    <div class="cart-total__line"><span>Entrega</span><span class="cart-included">Incluida</span></div>
+                    <div class="cart-total__grand"><span>Total estimado</span><strong id="cart-total">$ 0</strong></div>
+                    <p class="cart-total__note">El total definitivo se calcula de nuevo en el servidor antes de confirmar.</p>
+                </div>
+
+                <button id="submit-purchase" type="submit" form="purchase-form" class="checkout-button" th:disabled="${#lists.isEmpty(productos) or mensajeCliente != null}" th:attr="data-profile-missing=${mensajeCliente != null}">
+                    <span>Confirmar pedido</span><span aria-hidden="true">→</span>
+                </button>
+                <div class="secure-note"><span aria-hidden="true">◈</span> Pedido seguro <i>·</i> Inventario protegido</div>
+            </aside>
+        </div>
+
+        <footer class="shop-footer"><span>mercado<span class="brand-mark__accent">.</span></span><span>Una forma más simple de elegir bien.</span><span>© <span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2026</span></span></footer>
+    </main>
+    <script th:src="@{/js/compra.js}" defer></script>
+</body>
+</html>

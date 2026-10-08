@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro</title>
+    <script th:src="@{/css/tailwind.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Crear Cuenta</h2>
+        <form id="registroForm" class="space-y-4">
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Usuario</label>
+                <input type="text" id="username" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-green-500" required>
+            </div>
+            <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2">Contraseña</label>
+                <input type="password" id="password" class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-green-500" required>
+            </div>
+            <div id="messageBox" class="text-sm hidden p-2 rounded"></div>
+            <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition duration-200">
+                Registrarse
+            </button>
+        </form>
+        <p class="mt-4 text-center text-sm text-gray-600">
+            ¿Ya tienes cuenta? <a th:href="@{/login}" class="text-blue-500 hover:underline">Inicia sesión</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('registroForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageBox = document.getElementById('messageBox');
+
+            try {
+                const response = await fetch('/api/auth/registro', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageBox.textContent = data.mensaje;
+                    messageBox.className = 'text-sm p-2 rounded bg-green-100 text-green-700';
+                    document.getElementById('registroForm').reset();
+                } else {
+                    messageBox.textContent = data.error || 'Error al registrar';
+                    messageBox.className = 'text-sm p-2 rounded bg-red-100 text-red-700';
+                }
+            } catch (error) {
+                messageBox.textContent = 'Error de conexión';
+                messageBox.className = 'text-sm p-2 rounded bg-red-100 text-red-700';
+            }
+        });
+    </script>
+</body>
+</html>

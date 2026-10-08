@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Pedido confirmado | mercado.')}"></head>
+<body class="shop-body">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="receipt-shell">
+        <div class="receipt-breadcrumb"><a th:href="@{/comprar}">Tienda</a><span>/</span><span>Pedido confirmado</span></div>
+
+        <section class="receipt-hero">
+            <div class="receipt-success-mark" aria-hidden="true">
+                <svg viewBox="0 0 72 72" fill="none"><circle cx="36" cy="36" r="32" fill="#D7EBDD"/><path d="m21 36 10 10 21-22" stroke="#315E4D" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="section-kicker">PEDIDO REGISTRADO</span>
+            <h1>¡Gracias por tu compra!</h1>
+            <p>Tu pedido ya está creado y el inventario fue actualizado. Aquí tienes todo el detalle.</p>
+            <div class="receipt-order-number"><span>NÚMERO DE PEDIDO</span><strong th:text="${'#' + compra.id}">#0000</strong></div>
+        </section>
+
+        <section class="receipt-layout">
+            <div class="receipt-main">
+                <div class="receipt-card">
+                    <div class="receipt-card__heading">
+                        <div><span class="section-kicker">RESUMEN DEL PEDIDO</span><h2>Artículos confirmados</h2></div>
+                        <span class="receipt-status"><i></i> Confirmado</span>
+                    </div>
+                    <div class="receipt-meta">
+                        <div><span>Fecha de compra</span><strong th:text="${#temporals.format(compra.fecha, 'dd/MM/yyyy')}">30/09/2026</strong></div>
+                        <div><span>Cliente</span><strong th:text="${compra.cliente.nombre}">Nombre</strong></div>
+                        <div><span>Unidades</span><strong th:text="${cantidadArticulos + (cantidadArticulos == 1 ? ' artículo' : ' artículos')}">2 artículos</strong></div>
+                    </div>
+
+                    <div class="receipt-items">
+                        <article th:each="detalle : ${detalles}" class="receipt-item">
+                            <div class="receipt-item__visual" aria-hidden="true">
+                                <svg viewBox="0 0 64 64" fill="none"><rect x="7" y="7" width="50" height="50" rx="14" fill="#E4F0E8"/><path d="M20 41V25l12-7 12 7v16H20Z" fill="#315E4D"/><path d="M28 41V31h8v10" stroke="#E4F0E8" stroke-width="2.5" stroke-linejoin="round"/></svg>
+                            </div>
+                            <div class="receipt-item__info">
+                                <strong th:text="${detalle.producto.nombre}">Producto</strong>
+                                <span th:text="${detalle.producto.descripcion}">Descripción</span>
+                                <small th:text="${detalle.cantidad + ' × $ ' + #numbers.formatDecimal(detalle.valor, 1, 'POINT', 0, 'COMMA')}">2 × $ 1.250</small>
+                            </div>
+                            <strong class="receipt-item__subtotal" th:text="${'$ ' + #numbers.formatDecimal(detalle.cantidad * detalle.valor, 1, 'POINT', 0, 'COMMA')}">$ 0</strong>
+                        </article>
+                    </div>
+                    <div class="receipt-total-row"><span>Total pagado</span><strong th:text="${'$ ' + #numbers.formatDecimal(compra.total, 1, 'POINT', 0, 'COMMA')}">$ 0</strong></div>
+                </div>
+            </div>
+
+            <aside class="receipt-side">
+                <div class="receipt-side__icon" aria-hidden="true">✓</div>
+                <h2>Todo en orden</h2>
+                <p>La compra quedó guardada correctamente en tu cuenta.</p>
+                <div class="receipt-side__facts">
+                    <div><span>Pedido</span><strong th:text="${'#' + compra.id}">#0000</strong></div>
+                    <div><span>Estado</span><strong>Confirmado</strong></div>
+                    <div><span>Inventario</span><strong>Actualizado</strong></div>
+                </div>
+                <a th:href="@{/comprar}" class="receipt-continue">Seguir comprando <span aria-hidden="true">→</span></a>
+                <a th:href="@{/home}" class="receipt-home">Volver al inicio</a>
+            </aside>
+        </section>
+
+        <footer class="shop-footer"><span>mercado<span class="brand-mark__accent">.</span></span><span>Gracias por elegirnos.</span><span th:text="${'#' + compra.id}">#pedido</span></footer>
+    </main>
+</body>
+</html>

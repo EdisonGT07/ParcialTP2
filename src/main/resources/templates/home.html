@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: head('Inicio')}"></head>
+<body class="min-h-screen bg-slate-100">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div th:replace="~{fragments/alerts :: alerts}"></div>
+
+        <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div>
+                    <p class="text-sm uppercase tracking-[0.2em] text-slate-500">Bienvenido</p>
+                    <h1 class="mt-2 text-3xl font-bold text-slate-800" th:text="${usuario.username}">Usuario</h1>
+                </div>
+                <span class="inline-flex rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-indigo-700" sec:authorize="hasRole('ADMIN')">ADMIN</span>
+                <span class="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-700" sec:authorize="hasRole('CLIENTE')">CLIENTE</span>
+            </div>
+        </div>
+
+        <div class="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/usuarios}" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-indigo-300">
+                <p class="text-sm text-slate-500">Usuarios</p>
+                <h2 class="mt-2 text-2xl font-bold text-slate-800">Pendientes</h2>
+                <p class="mt-2 text-sm text-slate-600">Aprobar nuevos accesos y asignar roles.</p>
+            </a>
+
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/producto/listar}" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-indigo-300">
+                <p class="text-sm text-slate-500">Productos</p>
+                <h2 class="mt-2 text-2xl font-bold text-slate-800">Inventario</h2>
+                <p class="mt-2 text-sm text-slate-600">Crear, editar y administrar el catálogo.</p>
+            </a>
+
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/cliente/listar}" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-indigo-300">
+                <p class="text-sm text-slate-500">Clientes</p>
+                <h2 class="mt-2 text-2xl font-bold text-slate-800">Perfiles</h2>
+                <p class="mt-2 text-sm text-slate-600">Ver y mantener información de clientes.</p>
+            </a>
+
+            <a sec:authorize="hasRole('CLIENTE')" th:href="@{/cliente/perfil}" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-indigo-300">
+                <p class="text-sm text-slate-500">Cliente</p>
+                <h2 class="mt-2 text-2xl font-bold text-slate-800">Mi perfil</h2>
+                <p class="mt-2 text-sm text-slate-600">Actualiza tus datos personales.</p>
+            </a>
+
+            <a sec:authorize="hasRole('CLIENTE')" th:href="@{/comprar}" class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:border-indigo-300 md:col-span-1">
+                <p class="text-sm text-slate-500">Compras</p>
+                <h2 class="mt-2 text-2xl font-bold text-slate-800">Realizar compra</h2>
+                <p class="mt-2 text-sm text-slate-600">Selecciona productos y confirma tu pedido.</p>
+            </a>
+        </div>
+    </main>
+</body>
+</html>

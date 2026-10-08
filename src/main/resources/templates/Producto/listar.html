@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Productos')}"></head>
+<body class="min-h-screen bg-slate-100">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div th:replace="~{fragments/alerts :: alerts}"></div>
+        <section class="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm uppercase tracking-[0.2em] text-slate-500">Administración</p>
+                    <h1 class="text-3xl font-bold text-slate-800" th:text="${titulo}">Productos</h1>
+                </div>
+                <a th:href="@{/producto/nuevo}" class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700">Nuevo producto</a>
+            </div>
+            <div class="mt-6 overflow-x-auto">
+                <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
+                    <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    <tr><th class="px-4 py-3">Nombre</th><th class="px-4 py-3">Descripción</th><th class="px-4 py-3">Precio</th><th class="px-4 py-3">Stock</th><th class="px-4 py-3">Categoría</th><th class="px-4 py-3">Marca</th><th class="px-4 py-3">Acciones</th></tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 text-slate-700">
+                    <tr th:if="${#lists.isEmpty(productos)}"><td colspan="7" class="px-4 py-8 text-center text-slate-500">No hay productos registrados.</td></tr>
+                    <tr th:each="p : ${productos}" class="hover:bg-slate-50">
+                        <td class="px-4 py-3 font-medium" th:text="${p.nombre}">Producto</td>
+                        <td class="px-4 py-3" th:text="${p.descripcion}">Descripción</td>
+                        <td class="px-4 py-3" th:text="${'$ ' + p.precio}">$ 0</td>
+                        <td class="px-4 py-3" th:text="${p.stock}">0</td>
+                        <td class="px-4 py-3" th:text="${p.categoria}">Categoría</td>
+                        <td class="px-4 py-3" th:text="${p.marca}">Marca</td>
+                        <td class="px-4 py-3">
+                            <div class="flex flex-wrap gap-2">
+                                <a th:href="@{/producto/editar/{id}(id=${p.id})}" class="rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100">Editar</a>
+                                <form th:action="@{/producto/eliminar/{id}(id=${p.id})}" method="post">
+                                    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                                    <button type="submit" class="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-red-700" onclick="return confirm('¿Eliminar este producto?')">Eliminar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

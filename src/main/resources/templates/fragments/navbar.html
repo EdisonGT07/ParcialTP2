@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<nav th:fragment="navbar" class="site-nav">
+    <div class="site-nav__inner">
+        <a th:href="@{/home}" class="brand-mark" aria-label="Compras, ir al inicio">
+            <span class="brand-mark__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M3 4h2l2.1 10.1a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 1.9-1.4L22 8H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="20" r="1.3" fill="currentColor"/><circle cx="18" cy="20" r="1.3" fill="currentColor"/></svg>
+            </span>
+            <span>mercado<span class="brand-mark__accent">.</span></span>
+        </a>
+
+        <div class="site-nav__links" sec:authorize="isAuthenticated()">
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/usuarios}">Usuarios</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/producto/listar}">Productos</a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/cliente/listar}">Clientes</a>
+            <a sec:authorize="hasRole('CLIENTE')" th:href="@{/cliente/perfil}">Mi perfil</a>
+            <a sec:authorize="hasRole('CLIENTE')" th:href="@{/comprar}" class="site-nav__active">Tienda</a>
+        </div>
+
+        <div class="site-nav__actions">
+            <a sec:authorize="isAnonymous()" th:href="@{/login}" class="nav-login">Iniciar sesión</a>
+            <a sec:authorize="isAnonymous()" th:href="@{/registro}" class="nav-register">Crear cuenta</a>
+            <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" class="m-0">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                <button type="submit" class="nav-login">Cerrar sesión</button>
+            </form>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Registro')}"></head>
+<body class="min-h-screen bg-slate-100">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <main class="mx-auto flex min-h-[calc(100vh-4rem)] max-w-5xl items-center justify-center px-4 py-10">
+        <div class="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+            <h1 class="text-3xl font-bold text-slate-800">Registrarme</h1>
+            <p class="mt-2 text-sm text-slate-600">La cuenta queda pendiente de aprobación por el administrador.</p>
+
+            <div th:if="${error != null}" class="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" th:text="${error}"></div>
+
+            <form th:action="@{/registro}" method="post" class="mt-6 space-y-5">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+                <div>
+                    <label for="username" class="mb-1 block text-sm font-medium text-slate-700">Correo</label>
+                    <input id="username" name="username" type="email" th:value="${username}" required class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                </div>
+                <div>
+                    <label for="password" class="mb-1 block text-sm font-medium text-slate-700">Contraseña</label>
+                    <input id="password" name="password" type="password" required class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                </div>
+                <button type="submit" class="inline-flex w-full items-center justify-center rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700">Crear cuenta</button>
+            </form>
+
+            <p class="mt-6 text-center text-sm text-slate-600">
+                ¿Ya tienes cuenta?
+                <a th:href="@{/login}" class="font-medium text-indigo-600 hover:text-indigo-500">Iniciar sesión</a>
+            </p>
+        </div>
+    </main>
+</body>
+</html>
